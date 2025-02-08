@@ -1,5 +1,5 @@
 # Application configuration
-module SmartLoop
+module SmartResearch
   class Application
     def self.setup
       # Initialize application settings

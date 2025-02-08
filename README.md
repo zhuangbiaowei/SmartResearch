@@ -1,6 +1,6 @@
 [中文版](README_zh.md)
 
-# 🧠 SmartLoop - Chain of Learning & Thinking (CoLT)
+# 🧠 SmartResearch - Chain of Learning & Thinking (CoLT)
 
 [![Ruby Version](https://img.shields.io/badge/Ruby-3.1%2B-red)](https://www.ruby-lang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -9,7 +9,7 @@
 
 ## 🌟 Core Concept: Chain of Learning & Thinking (CoLT)
 
-Unlike traditional Chain-of-Thought (CoT) approaches, SmartLoop implements an enhanced **Learning & Thinking Cycle**:
+Unlike traditional Chain-of-Thought (CoT) approaches, SmartResearch implements an enhanced **Learning & Thinking Cycle**:
 
 ```
 [Think] → [Search] → [Learn] → [Store] → [Repeat]
@@ -40,18 +40,18 @@ This self-reinforcing loop enables persistent knowledge accumulation and adaptiv
 - SQLite3
 
 ```bash
-git clone https://github.com/zhuangbiaowei/smartloop.git
-cd smartloop
+git clone https://github.com/zhuangbiaowei/SmartResearch.git
+cd SmartResearch
 bundle install
 ```
 
 ## 🛠️ Usage
 
 ```bash
-./bin/smartloop
+./bin/smart_research
 
 # Sample Interaction
-[SmartLoop v0.1] > What task shall we conquer today?
+[SmartResearch v0.1] > What task shall we conquer today?
 > Explain quantum computing basics
 
 [THINKING] Generating initial hypotheses...

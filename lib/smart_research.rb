@@ -1,16 +1,19 @@
-module SmartLoop
+module SmartResearch
   class CLI
     def self.start(argv)
       # Initialize the learning loop
-      loop = LearningLoop.new
+      app = Application.new
+      loop = LearningLoop.new(app)
       loop.run
     end
   end
 
   class LearningLoop
-    def run
+    def run(app)
       # Core learning loop implementation
+      @app = app
       loop do
+        app.render
         think
         search
         learn

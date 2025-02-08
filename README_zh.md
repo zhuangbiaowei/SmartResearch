@@ -1,6 +1,6 @@
 [English](README.md)
 
-# 🧠 SmartLoop - 学思链（CoLT）
+# 🧠 SmartResearch - 学思链（CoLT），助力研究的最佳工具
 
 [![Ruby 版本](https://img.shields.io/badge/Ruby-3.1%2B-red)](https://www.ruby-lang.org)
 [![许可证: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -9,7 +9,7 @@
 
 ## 🌟 核心机制：学思链（CoLT）
 
-与传统思维链（CoT）不同，SmartLoop实现了增强的**学习思考循环**：
+与传统思维链（CoT）不同，SmartResearch 实现了增强的**学习思考循环**：
 
 ```
 [思考] → [搜索] → [学习] → [存储] → [循环]
@@ -40,18 +40,18 @@
 - SQLite3
 
 ```bash
-git clone https://github.com/zhuangbiaowei/smartloop.git
-cd smartloop
+git clone https://github.com/zhuangbiaowei/SmartResearch.git
+cd SmartResearch
 bundle install
 ```
 
 ## 🛠️ 使用指南
 
 ```bash
-./bin/smartloop
+./bin/smart_research
 
 # 示例交互
-[SmartLoop v0.1] > 今天要解决什么任务？
+[SmartResearch v0.1] > 今天要解决什么任务？
 > 解释量子计算基础
 
 [思考中] 生成初始假设...
