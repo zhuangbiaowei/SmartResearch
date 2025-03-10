@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'smart_research'
+require './lib/smart_research'
 
 SmartResearch::CLI.start(ARGV)

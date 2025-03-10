@@ -1,5 +1,9 @@
-require_relative 'smart_research/application'
-require_relative 'smart_research/learning_loop'
+require '../rich/lib/ruby_rich'
+require "../smart_prompt/lib/smart_prompt"
+
+require_relative './smart_research/application'
+require_relative './smart_research/learning_loop'
+Dir["#{__dir__}/smart_research/components/*.rb"].each { |f| require_relative f }
 
 module SmartResearch
   class CLI
@@ -8,6 +12,16 @@ module SmartResearch
       app = Application.new
       loop = LearningLoop.new(app)
       loop.run
+    end
+  end
+
+  def self.logger=(logger)
+    @logger = logger
+  end
+  
+  def self.logger
+    @logger ||= Logger.new($stdout).tap do |log|
+      log.progname = self.name
     end
   end
 end

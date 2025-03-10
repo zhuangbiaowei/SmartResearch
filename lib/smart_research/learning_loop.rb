@@ -1,15 +1,13 @@
 module SmartResearch
   class LearningLoop
-    def run(app)
-      # Core learning loop implementation
+    def initialize(app)
       @app = app
-      loop do
-        app.render
-        think
-        search
-        learn
-        store
-      end
+    end
+
+    def run
+      #loop do
+      @app.start
+      #end
     end
 
     private
