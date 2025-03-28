@@ -8,37 +8,43 @@ module SmartResearch
         return layout
       end
 
-      def self.draw_view(layout)        
+      def self.draw_view(layout)
         layout.update_content(RubyRich::Panel.new(
           "> ",
           title: "交流与探索 (F6 = 换行，↑/↓ = 切换聊天历史) model: Pro/deepseek-ai/DeepSeek-R1",
-          border_style: :cyan
+          border_style: :cyan,
         ))
       end
 
       def self.register_event_listener(layout)
-        layout.key(:f6){|event, live|
+        layout.key(:f6) { |event, live|
           input_panel = live.find_panel("input_area")
           input_panel.content += "\n> "
           live.params[:input_pos] = 2
           live.params[:prompt_list][-1] = input_panel.content
         }
-        layout.key(:string){|event, live|
+        layout.key(:string) { |event, live|
           input_panel = live.find_panel("input_area")
           input_pos = live.params[:input_pos]
           input_str = event[:value]
-          if input_pos == input_panel.content.split("\n").last.to_s.size
-            input_panel.content = input_panel.content + input_str
+          if input_str == "\n"
+            input_panel.content += "\n> "
+            live.params[:input_pos] = 2
+            live.params[:prompt_list][-1] = input_panel.content
           else
-            input_panel.content = input_panel.content[0..input_pos-1].to_s + input_str + input_panel.content[input_pos..-1].to_s
+            if input_pos == input_panel.content.split("\n").last.to_s.size
+              input_panel.content = input_panel.content + input_str
+            else
+              input_panel.content = input_panel.content[0..input_pos - 1].to_s + input_str + input_panel.content[input_pos..-1].to_s
+            end
+            live.params[:input_pos] = input_pos + 1
+            live.params[:prompt_list][-1] = input_panel.content
           end
-          live.params[:input_pos] = input_pos + 1
-          live.params[:prompt_list][-1] = input_panel.content
         }
-        layout.key(:enter){|event, live|
+        layout.key(:enter) { |event, live|
           input_panel = live.find_panel("input_area")
           unless input_panel.content == "> "
-            arr = input_panel.content.split("\n").map { |str| str[2..-1] }          
+            arr = input_panel.content.split("\n").map { |str| str[2..-1] }
             input_text = arr.join("\n")
             content_panel = live.find_panel("content")
             i = 0
@@ -59,8 +65,9 @@ module SmartResearch
               input_panel.content = "> "
               input_panel.home
               content_panel.border_style = :green
-              live.app.call_worker(input_text, content_panel, live.params[:use_name], live.params[:model_name]) 
-              input_panel.border_style = :cyan            
+              #live.app.call_worker(input_text, content_panel, live.params[:use_name], live.params[:model_name])
+              live.app.call_agent(input_text, content_panel, :smart_bot)
+              input_panel.border_style = :cyan
               content_panel.border_style = :white
               conversation_name = live.params[:current_conversation_name]
               if conversation_name
@@ -73,7 +80,7 @@ module SmartResearch
             live.params[:prompt_list][-1] = input_panel.content
           end
         }
-        layout.key(:delete){|event, live|
+        layout.key(:delete) { |event, live|
           input_panel = live.find_panel("input_area")
           input_pos = live.params[:input_pos]
           arr = input_panel.content.split("\n")
@@ -81,12 +88,12 @@ module SmartResearch
           if input_pos == text.size - 1 && input_pos >= 2
             input_panel.content = input_panel.content[0..-2]
           elsif input_pos.between?(2, text.size - 2)
-            arr[-1] = text[0..input_pos-1].to_s + text[input_pos+1..-1].to_s
+            arr[-1] = text[0..input_pos - 1].to_s + text[input_pos + 1..-1].to_s
             input_panel.content = arr.join("\n")
           end
           live.params[:prompt_list][-1] = input_panel.content
         }
-        layout.key(:backspace){|event, live|
+        layout.key(:backspace) { |event, live|
           input_panel = live.find_panel("input_area")
           input_pos = live.params[:input_pos]
           arr = input_panel.content.split("\n")
@@ -96,40 +103,40 @@ module SmartResearch
             input_panel.content = arr.join("\n")
             live.params[:input_pos] -= 1 if input_pos > 2
           elsif input_pos.between?(3, text.size - 1)
-            arr[-1] = text[0..input_pos-2].to_s + text[input_pos..-1].to_s
+            arr[-1] = text[0..input_pos - 2].to_s + text[input_pos..-1].to_s
             input_panel.content = arr.join("\n")
             live.params[:input_pos] -= 1 if input_pos > 0
-          elsif input_pos==3
+          elsif input_pos == 3
             arr[-1] = text[1..-1]
             input_panel.content = arr.join("\n")
             live.params[:input_pos] = 2
-          elsif input_pos==2 && arr.size>1
+          elsif input_pos == 2 && arr.size > 1
             input_panel.content = arr[0..-2].join("\n")
             live.params[:input_pos] = arr[-2].size
           end
           live.params[:prompt_list][-1] = input_panel.content
         }
-        layout.key(:left){|event, live|
+        layout.key(:left) { |event, live|
           live.params[:input_pos] -= 1 if live.params[:input_pos] > 2
         }
-        layout.key(:right){|event, live|
+        layout.key(:right) { |event, live|
           input_panel = live.find_panel("input_area")
           live.params[:input_pos] += 1 if live.params[:input_pos] < input_panel.content.size
         }
-        layout.key(:up){|event, live|
+        layout.key(:up) { |event, live|
           input_panel = live.find_panel("input_area")
           if live.params[:prompt_no] > 0
-            live.params[:current_prompt] = input_panel.content if live.params[:prompt_no]==live.params[:prompt_list].size-1
+            live.params[:current_prompt] = input_panel.content if live.params[:prompt_no] == live.params[:prompt_list].size - 1
             live.params[:prompt_no] -= 1
             input_panel.content = live.params[:prompt_list][live.params[:prompt_no]]
             live.params[:input_pos] = input_panel.content.split("\n").last.size
           end
         }
-        layout.key(:down){|event, live|
+        layout.key(:down) { |event, live|
           input_panel = live.find_panel("input_area")
-          if live.params[:prompt_no] < live.params[:prompt_list].size-1
+          if live.params[:prompt_no] < live.params[:prompt_list].size - 1
             live.params[:prompt_no] += 1
-            if live.params[:prompt_no] == live.params[:prompt_list].size-1
+            if live.params[:prompt_no] == live.params[:prompt_list].size - 1
               input_panel.content = live.params[:current_prompt]
             else
               input_panel.content = live.params[:prompt_list][live.params[:prompt_no]]

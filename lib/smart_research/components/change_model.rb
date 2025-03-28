@@ -7,7 +7,9 @@ module SmartResearch
           ["SiliconFlow", "Pro/deepseek-ai/DeepSeek-V3"],
           ["SiliconFlow", "Qwen/QwQ-32B"],
           ["SiliconFlow", "Qwen/QVQ-72B-Preview"],
-          ["ollama", "deepseek-r1"]
+          ["ollama", "deepseek-r1"],
+          ["deepseek", "deepseek-chat"],
+          ["deepseek", "deepseek-reasoner"],
         ]
       end
       def self.build(live)
@@ -23,16 +25,16 @@ module SmartResearch
         return dialog
       end
       def self.register_event_listener(dialog)
-        dialog.key(:escape){|event, live|
+        dialog.key(:escape) { |event, live|
           live.layout.hide_dialog
         }
-        dialog.key(:string){|event, live|
+        dialog.key(:string) { |event, live|
           key_value = event[:value].to_i
-          model = models[key_value-1]
+          model = models[key_value - 1]
           live.params[:use_name] = model[0]
           live.params[:model_name] = model[1]
           input_panel = live.find_panel("input_area")
-          input_panel.title = "交流与探索 (F6 = 换行，↑/↓ = 切换聊天历史)  model: #{model[1]}"          
+          input_panel.title = "交流与探索 (F6 = 换行，↑/↓ = 切换聊天历史)  model: #{model[1]}"
           live.layout.hide_dialog
         }
       end

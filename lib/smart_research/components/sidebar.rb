@@ -10,7 +10,20 @@ module SmartResearch
 
       def self.draw_view(layout)
         layout.update_content(RubyRich::Panel.new(
-          "[F1] 帮助\n[F2] 交流与探索\n[F3] 整理知识库\n[F4] 创作与输出\n----------------------\n[Ctrl+N] 开启新对话\n[Ctrl+S] 保存对话\n[Ctrl+O] 加载历史对话\n[Ctrl+W] 切换工作模型\n----------------------\n[Ctrl+C] 退出",
+          "[F1] 帮助\n"+
+          "[F2] 交流与探索\n"+
+          "[F3] 整理知识库\n"+
+          "[F4] 创作与输出\n"+
+          "----------------------\n"+
+          "[Ctrl+N] 开启新对话\n"+
+          "[Ctrl+D] 删除对话\n"+
+          "[Ctrl+S] 保存对话\n"+
+          "[Ctrl+O] 加载历史对话\n"+
+          "----------------------\n"+
+          "[Ctrl+T] 加载工具或MCP\n"+
+          "[Ctrl+W] 切换工作模型\n"+
+          "----------------------\n"+
+          "[Ctrl+C] 退出",
           title: "快捷方式",
           border_style: :green
         ))        
