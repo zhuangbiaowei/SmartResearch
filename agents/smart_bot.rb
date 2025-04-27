@@ -1,8 +1,12 @@
 SmartAgent.define :smart_bot do
-  result = call_worker(:smart_bot, params, with_tools: true)
-  if result.call_tools
-    tool_result = call_tools(result)
-    result = call_worker(:summary, params, result: tool_result.to_s, with_tools: false)
+  call_tool = true
+  while call_tool
+    result = call_worker(:smart_bot, params, with_tools: true, with_history: true)
+    if result.call_tools
+      call_tools(result)
+    else
+      call_tool = false
+    end
   end
   if result != true
     result.response
@@ -11,4 +15,4 @@ SmartAgent.define :smart_bot do
   end
 end
 
-SmartAgent.build_agent(:smart_bot, tools: [:get_weather, :get_sum, :search], mcp_servers: [:opendigger])
+SmartAgent.build_agent(:smart_bot, tools: [:search, :get_code], mcp_servers: [:opendigger, :sequentialthinking_tools, :amap])

@@ -25,7 +25,6 @@ module SmartResearch
       agent = @agent_engine.agents[agent_name]
       SmartResearch.logger.info("agent is:" + agent.to_s)
       agent.on_reasoning do |chunk|
-        SmartResearch.logger.info("on_reasoning chunk is:" + chunk.to_s)
         reasoned = true
         if reasoning == false
           content_panel.content += RubyRich::AnsiCode.color(:blue) + "AI Thinking: " + RubyRich::AnsiCode.reset + "\n"
@@ -34,7 +33,6 @@ module SmartResearch
         content_panel.content += chunk.dig("choices", 0, "delta", "reasoning_content")
       end
       agent.on_content do |chunk|
-        SmartResearch.logger.info("on_content chunk is:" + chunk.to_s)
         if reasoning == true
           if reasoned == true
             content_panel.content += RubyRich::AnsiCode.color(:blue) + "AI Talking: " + RubyRich::AnsiCode.reset + "\n"
@@ -50,20 +48,15 @@ module SmartResearch
       end
       agent.on_tool_call do |msg|
         if msg[:status] == :start
-          content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + "Call: " + RubyRich::AnsiCode.reset
+          content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + "Call:" + RubyRich::AnsiCode.reset + "\n"
         elsif msg[:status] == :end
-          content_panel.content += "\n"
+          content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + "Call tools completion.\n" + RubyRich::AnsiCode.reset
         else
           content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + msg[:content] + RubyRich::AnsiCode.reset
         end
       end
-      result = agent.please(input_text)
-      if result != true
-        content_panel.content += RubyRich::AnsiCode.color(:blue) + "AI Talking: " + RubyRich::AnsiCode.reset + "\n"
-        content_panel.content += result + "\n"
-      else
-        content_panel.content += "\n"
-      end
+      agent.please(input_text)
+      content_panel.content += "\n"
     end
 
     def call_worker(input_text, content_panel, use_name, model_name)
@@ -96,6 +89,10 @@ module SmartResearch
         end
       end
       content_panel.content += "\n"
+    end
+
+    def clear_history_messages
+      @engine.clear_history_messages
     end
 
     def get_conversation_name(content)
