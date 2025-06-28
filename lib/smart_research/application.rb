@@ -99,7 +99,7 @@ module SmartResearch
       return @engine.call_worker(:get_conversation_name, { content: content })
     end
 
-    def start
+    def start   
       RubyRich::Live.start(@layout, refresh_rate: 24) do |live|
         live.params[:input_pos] = 2
         live.params[:prompt_list] = ["> "]
@@ -107,7 +107,7 @@ module SmartResearch
         live.params[:current_prompt] = ""
         live.listening = true
         live.app = self
-      end
+      end      
     end
   end
 end

@@ -1,4 +1,4 @@
-require "../rich/lib/ruby_rich"
+require "ruby_rich"
 require "../smart_prompt/lib/smart_prompt"
 require "../smart_agent/lib/smart_agent"
 

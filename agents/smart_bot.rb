@@ -15,4 +15,5 @@ SmartAgent.define :smart_bot do
   end
 end
 
-SmartAgent.build_agent(:smart_bot, tools: [:search, :get_code], mcp_servers: [:opendigger, :sequentialthinking_tools, :amap])
+SmartAgent.build_agent(:smart_bot, tools: [:get_code], mcp_servers: [:opendigger, :amap, :all_in_one])
+#SmartAgent.add_agent_tools(:smart_bot, :query_db, { "db_url" => "postgres://docs:ment@localhost/docs" })

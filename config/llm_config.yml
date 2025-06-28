@@ -1,6 +1,7 @@
 adapters:
   openai: OpenAIAdapter
 logger_file: ./log/prompt.log
+better_prompt_db: ./db/prompt.db
 database:
   docs: postgres://docs:ment@localhost/docs
 llms:

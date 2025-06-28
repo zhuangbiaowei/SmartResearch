@@ -4,7 +4,7 @@ require "net/http"
 
 SmartAgent::Tool.define :search do
   param_define :q, "Search Keywords", :string
-  if input_params
+  tool_proc do
     url = URI("https://google.serper.dev/search")
 
     https = Net::HTTP.new(url.host, url.port)

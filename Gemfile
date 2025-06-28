@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.3.4'
-
+gem 'sequel'
 gem 'pg'
 gem 'thor' # For CLI interface
 gem 'httparty' # For web requests

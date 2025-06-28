@@ -4,7 +4,7 @@ SmartAgent::Tool.define :get_code do
   param_define :input_params_type, "define of input parameters: (name:type, name:type ... )", :string
   param_define :output_value_type, "type of return value.", :string
   param_define :input_params, "input parameters: (value, value ...)", :string
-  if input_params
+  tool_proc do
     code = call_worker(:get_code, input_params)
     if input_params["input_params"][0] == "(" && input_params["input_params"][-1] == ")"
       code += "\n" + input_params["name"] + input_params["input_params"]
