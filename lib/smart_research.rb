@@ -1,6 +1,6 @@
 require "ruby_rich"
-require "../smart_prompt/lib/smart_prompt"
-require "../smart_agent/lib/smart_agent"
+require "smart_prompt"
+require "smart_agent"
 
 require_relative "./smart_research/application"
 require_relative "./smart_research/learning_loop"

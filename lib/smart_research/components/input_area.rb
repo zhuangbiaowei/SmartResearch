@@ -11,7 +11,7 @@ module SmartResearch
       def self.draw_view(layout)
         layout.update_content(RubyRich::Panel.new(
           "> ",
-          title: "交流与探索 (F6 = 换行，↑/↓ = 切换聊天历史) model: Pro/deepseek-ai/DeepSeek-R1",
+          title: "交流与探索 (F6 = 换行，↑/↓ = 切换聊天历史)",
           border_style: :cyan,
         ))
       end

@@ -1,4 +1,5 @@
 SmartAgent::Tool.define :get_code do
+  desc "Call the LLM to generate a Ruby function with the input details"
   param_define :name, "ruby function name", :string
   param_define :description, "ruby function description", :string
   param_define :input_params_type, "define of input parameters: (name:type, name:type ... )", :string
@@ -11,6 +12,7 @@ SmartAgent::Tool.define :get_code do
     else
       code += "\n" + input_params["name"] + "(" + input_params["input_params"] + ")"
     end
+    SmartResearch.logger.info "GetCode is: #{code}"
     "通过生成的代码:\n #{code} \n得到了结果: #{eval(code)}"
   end
 end

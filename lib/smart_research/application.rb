@@ -24,27 +24,31 @@ module SmartResearch
       reasoned = false
       agent = @agent_engine.agents[agent_name]
       SmartResearch.logger.info("agent is:" + agent.to_s)
-      agent.on_reasoning do |chunk|
-        reasoned = true
-        if reasoning == false
-          content_panel.content += RubyRich::AnsiCode.color(:blue) + "AI Thinking: " + RubyRich::AnsiCode.reset + "\n"
-          reasoning = true
+      agent.on_reasoning do |chunk|        
+        unless chunk.dig("choices", 0, "delta", "reasoning_content").empty?
+          reasoned = true
+          if reasoning == false
+            content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + "AI Thinking: " + RubyRich::AnsiCode.reset
+            reasoning = true
+          end
+          content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + chunk.dig("choices", 0, "delta", "reasoning_content") + RubyRich::AnsiCode.reset
         end
-        content_panel.content += chunk.dig("choices", 0, "delta", "reasoning_content")
       end
       agent.on_content do |chunk|
-        if reasoning == true
-          if reasoned == true
-            content_panel.content += RubyRich::AnsiCode.color(:blue) + "AI Talking: " + RubyRich::AnsiCode.reset + "\n"
-            reasoning = false
+        unless chunk.dig("choices", 0, "delta", "content").empty?
+          if reasoning == true
+            if reasoned == true
+              content_panel.content += RubyRich::AnsiCode.color(:blue) + "AI Talking: " + RubyRich::AnsiCode.reset + "\n"
+              reasoning = false
+            end
+          else
+            if reasoned == false
+              content_panel.content += RubyRich::AnsiCode.color(:blue) + "AI Talking: " + RubyRich::AnsiCode.reset + "\n"
+              reasoned = true
+            end
           end
-        else
-          if reasoned == false
-            content_panel.content += RubyRich::AnsiCode.color(:blue) + "AI Talking: " + RubyRich::AnsiCode.reset + "\n"
-            reasoned = true
-          end
+          content_panel.content += chunk.dig("choices", 0, "delta", "content")
         end
-        content_panel.content += chunk.dig("choices", 0, "delta", "content")
       end
       agent.on_tool_call do |msg|
         if msg[:status] == :start
@@ -52,13 +56,13 @@ module SmartResearch
         elsif msg[:status] == :end
           content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + "Call tools completion.\n" + RubyRich::AnsiCode.reset
         else
-          content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + msg[:content] + RubyRich::AnsiCode.reset
+          content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + msg[:content].to_s + RubyRich::AnsiCode.reset
         end
       end
       agent.please(input_text)
       content_panel.content += "\n"
     end
-
+=begin
     def call_worker(input_text, content_panel, use_name, model_name)
       reasoning = false
       reasoned = false
@@ -90,7 +94,7 @@ module SmartResearch
       end
       content_panel.content += "\n"
     end
-
+=end
     def clear_history_messages
       @engine.clear_history_messages
     end
