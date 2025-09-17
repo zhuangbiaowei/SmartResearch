@@ -2,6 +2,7 @@ require "ruby_rich"
 require "smart_prompt"
 require "smart_agent"
 
+require_relative "./database"
 require_relative "./smart_research/application"
 require_relative "./smart_research/learning_loop"
 Dir["#{__dir__}/smart_research/components/*.rb"].each { |f| require_relative f }

@@ -42,6 +42,7 @@ module SmartResearch
           end
         }
         layout.key(:enter) { |event, live|
+          live.params[:model] = "chat" unless live.params[:model]
           input_panel = live.find_panel("input_area")
           unless input_panel.content == "> "
             arr = input_panel.content.split("\n").map { |str| str[2..-1] }
@@ -65,8 +66,13 @@ module SmartResearch
               input_panel.content = "> "
               input_panel.home
               content_panel.border_style = :green
-              #live.app.call_worker(input_text, content_panel, live.params[:use_name], live.params[:model_name])
-              live.app.call_agent(input_text, content_panel, :smart_bot)
+              if live.params[:model] == "chat"
+                live.app.call_agent(:smarter_search, input_text, content_panel)
+              elsif live.params[:model] == "ask"
+                live.app.call_agent(:smart_kb, input_text, content_panel)
+              elsif live.params[:model] == "write"
+                live.app.call_agent(:smart_writer, input_text, content_panel)
+              end
               input_panel.border_style = :cyan
               content_panel.border_style = :white
               conversation_name = live.params[:current_conversation_name]
@@ -79,6 +85,7 @@ module SmartResearch
             }
             live.params[:prompt_list][-1] = input_panel.content
           end
+          #live.stop
         }
         layout.key(:delete) { |event, live|
           input_panel = live.find_panel("input_area")

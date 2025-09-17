@@ -1,0 +1,21 @@
+请为我撰写一篇文章的其中一个章节。整体的目录如下：
+<%= outline %>
+考虑到内容的连贯性，请参考已经搜集到的相关材料。
+<%= contents %>
+<% if defined?(article_style) && article_style %>
+文章风格要求：<%= article_style %>
+<% end %>
+<% if defined?(article_audience) && article_audience %>
+目标读者：<%= article_audience %>
+<% end %>
+本章节的字数要求，不超过：<%= length %> 字
+<% if title.include?("章")%>
+本章的标题是：<%= title %>
+本章的内容简介是：<%= summary %>
+注意1：只需要本章的一个引导性的介绍，不要涉及后续的小节。
+<% else %>
+本节的标题是：<%= title %>
+本节的内容简介是：<%= summary %>
+注意1： 展开论述本小节的内容，不要涉及后续的小节。
+<% end %>
+注意2：只输出内容，不输出章节标题

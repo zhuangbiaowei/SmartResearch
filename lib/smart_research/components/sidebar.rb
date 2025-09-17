@@ -20,9 +20,6 @@ module SmartResearch
           "[Ctrl+S] 保存对话\n" +
           "[Ctrl+O] 加载历史对话\n" +
           "----------------------\n" +
-          "[Ctrl+T] 加载工具或MCP\n" +
-          "[Ctrl+W] 切换工作模型\n" +
-          "----------------------\n" +
           "[Ctrl+C] 退出",
           title: "快捷方式",
           border_style: :green,
@@ -33,6 +30,39 @@ module SmartResearch
         layout.key(:f1) { |event, live|
           dialog = HelpDialog.build(live)
           live.layout.show_dialog(dialog)
+        }
+        layout.key(:f2) { |event, live|
+          live.params[:model] = "chat"
+          input_panel = live.find_panel("input_area")
+          if input_panel.border_style == :cyan
+            input_panel.title = "交流与探索 (F6 = 换行，↑/↓ = 切换聊天历史)"
+            input_panel.content = "> "
+            content_panel = live.find_panel("content")
+            content_panel.home
+            content_panel.content = ""
+          end
+        }
+        layout.key(:f3) { |event, live|
+          live.params[:model] = "ask"
+          input_panel = live.find_panel("input_area")
+          if input_panel.border_style == :cyan
+            input_panel.title = "整理知识库 (h = 帮助)"
+            input_panel.content = "> "
+            content_panel = live.find_panel("content")
+            content_panel.home
+            content_panel.content = ""
+          end
+        }
+        layout.key(:f4) { |event, live|
+          live.params[:model] = "write"
+          input_panel = live.find_panel("input_area")
+          if input_panel.border_style == :cyan
+            input_panel.title = "创作与输出 (F6 = 换行，↑/↓ = 切换聊天历史)"
+            input_panel.content = "> "
+            content_panel = live.find_panel("content")
+            content_panel.home
+            content_panel.content = ""
+          end
         }
         layout.key(:ctrl_c) { |event, live| live.stop }
         layout.key(:ctrl_s) { |event, live|
@@ -66,10 +96,6 @@ module SmartResearch
           content_panel.title = "聊天窗"
           content_panel.home
           live.params[:current_conversation_name] = nil
-        }
-        layout.key(:ctrl_w) { |event, live|
-          dialog = ChangeModel.build(live)
-          live.layout.show_dialog(dialog)
         }
       end
     end

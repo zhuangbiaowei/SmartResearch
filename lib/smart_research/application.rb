@@ -19,12 +19,12 @@ module SmartResearch
       SmartResearch.logger = Logger.new("./log/app.log")
     end
 
-    def call_agent(input_text, content_panel, agent_name)
+    def call_agent(agent_name, input_text, content_panel)
       reasoning = false
       reasoned = false
       agent = @agent_engine.agents[agent_name]
-      SmartResearch.logger.info("agent is:" + agent.to_s)
-      agent.on_reasoning do |chunk|        
+      SmartResearch.logger.info("agent is: #{agent_name}")
+      agent.on_reasoning do |chunk|
         unless chunk.dig("choices", 0, "delta", "reasoning_content").empty?
           reasoned = true
           if reasoning == false
@@ -32,6 +32,9 @@ module SmartResearch
             reasoning = true
           end
           content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + chunk.dig("choices", 0, "delta", "reasoning_content") + RubyRich::AnsiCode.reset
+          if chunk.dig("choices", 0, "finish_reason") == true
+            content_panel.content += "\n"
+          end
         end
       end
       agent.on_content do |chunk|
@@ -48,6 +51,9 @@ module SmartResearch
             end
           end
           content_panel.content += chunk.dig("choices", 0, "delta", "content")
+          if chunk.dig("choices", 0, "finish") == true
+            content_panel.content += "\n"
+          end
         end
       end
       agent.on_tool_call do |msg|
@@ -56,45 +62,16 @@ module SmartResearch
         elsif msg[:status] == :end
           content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + "Call tools completion.\n" + RubyRich::AnsiCode.reset
         else
-          content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + msg[:content].to_s + RubyRich::AnsiCode.reset
+          # content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + msg[:content].to_s + "\n" + RubyRich::AnsiCode.reset
         end
+      end
+      agent.on_logging do |msg|
+        content_panel.content += RubyRich::AnsiCode.color(:cyan, true) + msg + RubyRich::AnsiCode.reset + "\n"
       end
       agent.please(input_text)
       content_panel.content += "\n"
     end
-=begin
-    def call_worker(input_text, content_panel, use_name, model_name)
-      reasoning = false
-      reasoned = false
-      use_name = "SiliconFlow" unless use_name
-      model_name = "Pro/deepseek-ai/DeepSeek-R1" unless model_name
-      @engine.call_worker_by_stream(:smart_agent, { text: input_text, use_name: use_name, model_name: model_name }) do |chunk, _bytesize|
-        if chunk.dig("choices", 0, "delta", "reasoning_content")
-          reasoned = true
-          if reasoning == false
-            content_panel.content += RubyRich::AnsiCode.color(:blue) + "AI Thinking: " + RubyRich::AnsiCode.reset + "\n"
-            reasoning = true
-          end
-          content_panel.content += chunk.dig("choices", 0, "delta", "reasoning_content")
-        end
-        if chunk.dig("choices", 0, "delta", "content")
-          if reasoning == true
-            if reasoned == true
-              content_panel.content += RubyRich::AnsiCode.color(:blue) + "AI Talking: " + RubyRich::AnsiCode.reset + "\n"
-              reasoning = false
-            end
-          else
-            if reasoned == false
-              content_panel.content += RubyRich::AnsiCode.color(:blue) + "AI Talking: " + RubyRich::AnsiCode.reset + "\n"
-              reasoned = true
-            end
-          end
-          content_panel.content += chunk.dig("choices", 0, "delta", "content")
-        end
-      end
-      content_panel.content += "\n"
-    end
-=end
+
     def clear_history_messages
       @engine.clear_history_messages
     end
@@ -103,7 +80,7 @@ module SmartResearch
       return @engine.call_worker(:get_conversation_name, { content: content })
     end
 
-    def start   
+    def start
       RubyRich::Live.start(@layout, refresh_rate: 24) do |live|
         live.params[:input_pos] = 2
         live.params[:prompt_list] = ["> "]
@@ -111,7 +88,7 @@ module SmartResearch
         live.params[:current_prompt] = ""
         live.listening = true
         live.app = self
-      end      
+      end
     end
   end
 end

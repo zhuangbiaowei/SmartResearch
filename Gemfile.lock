@@ -1,0 +1,175 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    Ascii85 (2.0.1)
+    afm (1.0.0)
+    base64 (0.3.0)
+    better_prompt (0.2.1)
+      ruby_rich (~> 0.4.0)
+      sqlite3 (~> 1.4)
+    bigdecimal (3.2.2)
+    brotli (0.7.0)
+    childprocess (5.1.0)
+      logger (~> 1.5)
+    colorize (1.1.0)
+    csv (3.3.5)
+    date (3.4.1)
+    debug (1.11.0)
+      irb (~> 1.10)
+      reline (>= 0.3.8)
+    docx (0.9.1)
+      nokogiri (~> 1.13, >= 1.13.0)
+      rubyzip (~> 2.0)
+    erb (5.0.2)
+    event_stream_parser (1.0.0)
+    faraday (2.13.4)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-multipart (1.1.1)
+      multipart-post (~> 2.0)
+    faraday-net_http (3.4.1)
+      net-http (>= 0.5.0)
+    hashery (2.1.2)
+    httparty (0.23.1)
+      csv
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
+    io-console (0.8.1)
+    irb (1.15.2)
+      pp (>= 0.6.0)
+      rdoc (>= 4.0.0)
+      reline (>= 0.4.2)
+    json (2.12.2)
+    logger (1.7.0)
+    mcp-sdk.rb (0.1.4)
+      faraday (>= 2.0.0)
+      json (>= 2.7.1)
+    mini_mime (1.1.5)
+    multi_xml (0.7.2)
+      bigdecimal (~> 3.1)
+    multipart-post (2.4.1)
+    mustermann (3.0.4)
+      ruby2_keywords (~> 0.0.1)
+    net-http (0.6.0)
+      uri
+    nio4r (2.7.4)
+    nokogiri (1.18.9-x86_64-linux-gnu)
+      racc (~> 1.4)
+    numo-narray (0.9.2.1)
+    pdf-reader (2.15.0)
+      Ascii85 (>= 1.0, < 3.0, != 2.0.0)
+      afm (>= 0.2.1, < 2)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
+    pg (1.6.1-x86_64-linux)
+    pp (0.6.2)
+      prettyprint
+    prettyprint (0.2.0)
+    psych (5.2.6)
+      date
+      stringio
+    puma (6.6.1)
+      nio4r (~> 2.0)
+    racc (1.8.1)
+    rack (3.2.0)
+    rack-protection (4.1.1)
+      base64 (>= 0.1.0)
+      logger (>= 1.6.0)
+      rack (>= 3.0.0, < 4)
+    rack-session (2.1.1)
+      base64 (>= 0.1.0)
+      rack (>= 3.0.0)
+    rdbg (0.1.0)
+      debug (>= 1.2.2)
+    rdoc (6.14.2)
+      erb
+      psych (>= 4.0.0)
+    redcarpet (3.6.1)
+    reline (0.6.2)
+      io-console (~> 0.5)
+    retriable (3.1.2)
+    rouge (4.5.2)
+    ruby-openai (8.1.0)
+      event_stream_parser (>= 0.3.0, < 2.0.0)
+      faraday (>= 1)
+      faraday-multipart (>= 1)
+    ruby-rc4 (0.1.5)
+    ruby2_keywords (0.0.5)
+    ruby_rich (0.4.0)
+      redcarpet (~> 3.6.1)
+      rouge (~> 4.5.2)
+      tty-cursor (~> 0.7.1)
+      tty-reader (~> 0.9.0)
+      tty-screen (~> 0.8.2)
+      unicode-display_width (~> 3.1.4)
+    rubyzip (2.4.1)
+    safe_ruby (1.0.5)
+      childprocess (~> 5)
+    sequel (5.95.1)
+      bigdecimal
+    sinatra (4.1.1)
+      logger (>= 1.6.0)
+      mustermann (~> 3.0)
+      rack (>= 3.0.0, < 4)
+      rack-protection (= 4.1.1)
+      rack-session (>= 2.0.0, < 3)
+      tilt (~> 2.0)
+    smart_agent (0.2.3)
+      mcp-sdk.rb
+      smart_prompt
+    smart_prompt (0.3.4)
+      better_prompt (~> 0.2.1)
+      json (~> 2.12.0)
+      numo-narray (~> 0.9.2.1)
+      retriable (~> 3.1.2)
+      ruby-openai (~> 8.1.0)
+      safe_ruby (~> 1.0.5)
+      yaml (~> 0.4.0)
+    sqlite3 (1.7.3-x86_64-linux)
+    stringio (3.1.7)
+    thor (1.4.0)
+    tilt (2.6.1)
+    ttfunk (1.8.0)
+      bigdecimal (~> 3.1)
+    tty-cursor (0.7.1)
+    tty-reader (0.9.0)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.8)
+      wisper (~> 2.0)
+    tty-screen (0.8.2)
+    unicode-display_width (3.1.5)
+      unicode-emoji (~> 4.0, >= 4.0.4)
+    unicode-emoji (4.0.4)
+    uri (1.0.3)
+    wisper (2.0.1)
+    yaml (0.4.0)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  better_prompt
+  brotli (~> 0.7.0)
+  colorize
+  docx
+  httparty
+  nokogiri (~> 1.18)
+  pdf-reader
+  pg
+  puma (~> 6.6)
+  rdbg
+  redcarpet
+  rouge
+  ruby_rich
+  sequel
+  sinatra (~> 4.1)
+  smart_agent
+  smart_prompt
+  thor
+  tty-cursor
+  tty-screen
+
+BUNDLED WITH
+   2.6.9

@@ -22,6 +22,14 @@ llms:
     url: https://api.deepseek.com
     api_key: ENV["DSKEY"]
     default_model: deepseek-reasoner
+  Aliyun:
+    adapter: openai
+    url: https://dashscope.aliyuncs.com/compatible-mode/v1/
+    api_key: ENV["ALIKEY"]
+  shengsuanyun:
+    adapter: openai
+    url: https://router.shengsuanyun.com/api/v1
+    api_key: ENV["SSYKEY"]
 default_llm: SiliconFlow
-worker_path: "./workers"
-template_path: "./templates"
+worker_path: "./agents/workers"
+template_path: "./agents/templates"
