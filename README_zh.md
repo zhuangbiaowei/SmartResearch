@@ -22,100 +22,73 @@ SmartResearch 实现了超越传统思维链的增强型**学习思考循环**�
 ## 🚀 主要功能
 
 ### 🤖 智能代理系统
-- **多模型支持**：无缝集成 DeepSeek、Qwen、Kimi 等主流大语言模型
-- **工具编排**：动态工具调用，支持 MCP（模型上下文协议）集成
+- **多模型支持**：无缝集成DeepSeek、Qwen、Kimi等主流大语言模型
+- **工具编排**：动态工具调用，支持MCP（模型上下文协议）集成
 - **自主工作流**：代理协调工作者和工具完成复杂多步骤任务
 
 ### 🔧 MCP 集成
 - **OpenDigger**：开源项目分析和指标统计
 - **全能工具集**：综合研究和分析工具包
-- **可扩展架构**：轻松集成新的 MCP 服务器和工具
+- **可扩展架构**：可以轻松集成新的 MCP 服务器和工具
 
 ### 📚 知识管理
-- **结构化存储**：基于 SQLite 的研究主题和文档管理
-- **向量搜索**：集成 pgvector 的语义搜索，实现智能检索
+- **向量搜索**：采用PG数据库，集成pgvector，实现智能检索
 - **标签系统**：分层标签和关系管理，实现有序研究
 
 ### 💬 交互式命令行界面
-- **实时可视化**：RubyRich TUI 实时显示思考过程
+- **实时可视化**：基于RubyRich TUI，在控制台完成所有操作
 - **对话管理**：保存、加载和组织研究对话
-- **模型切换**：实时切换模型以获得最佳任务性能
 
 ### 🔍 研究工具
-- **网页抓取**：MetaScrape 集成，支持内容提取
-- **代码生成**：动态 Ruby 代码生成和执行
-- **天气位置**：实用工具提供现实世界上下文
-- **数据库查询**：SQL 查询能力支持数据分析
+- **网页抓取**：MetaScrape集成，支持内容提取
+- **数据库查询**：SQL查询能力支持数据分析
 
 ## 📦 安装
 
 ### 环境要求
 - Ruby 3.1+
-- SQLite3
-- PostgreSQL（向量搜索功能）
-- Node.js（MCP 服务器依赖）
+- Python 3 + markitdown，将各种内容统一转化为Markdown格式
+- SQLite3（用于集成Better_Prompt，记录对话日志，优化各种提示词）
+- PostgreSQL + pgvector（向量搜索功能）
 
 ```bash
 git clone https://github.com/zhuangbiaowei/SmartResearch.git
 cd SmartResearch
 bundle install
+pip3 install markitdown[all]
 ```
 
 ### MCP 服务器设置
 ```bash
 # 安装 OpenDigger MCP 服务器
-cd /root/open-digger-mcp-server
+git clone https://github.com/X-lab2017/open-digger-mcp-server
+cd open-digger-mcp-server
 npm install
 npm run build
 ```
 
 ## 🛠️ 使用指南
 
-### 基础交互
+### 启动
 ```bash
 ./bin/smart_research
-
-# 示例交互
-[SmartResearch v0.5] > 今天要开展什么研究？
-> 分析量子计算的最新趋势
-
-[思考中] 生成研究假设...
-[搜索中] 查询知识库和外部资源...
-[学习中] 将新发现整合到研究主题...
 ```
 
-### 高级功能
-
-**研究主题管理：**
-```bash
-# 创建研究主题
-> 创建研究主题 "2024年量子计算进展"
-
-# 搜索和组织发现
-> 查找关于量子霸权的相关论文
-```
-
-**工具集成：**
-```bash
-# 使用 OpenDigger 进行开源分析
-> 分析 GitHub 上 Vue.js 项目指标
-
-# 网页内容提取
-> 抓取并分析 arXiv 上的研究论文
-```
-
-**对话管理：**
-- `F2`: 保存当前对话
-- `F3`: 加载历史对话
-- `F4`: 切换 AI 模型
-- `F6`: 插入新行
-- `↑/↓`: 浏览聊天历史
+- 在F2（交流与探索）模式下，直接提出问题，SmartResearch会帮你指定搜索计划。
+- 在F3（整理知识库）模式下
+    - 输入h，获得帮助
+    - 输入dall，下载在探索模式下发现的，所有需要获取完整内容的网页、文档
+    - 输入ask 问题，向知识库直接提问
+- 在F4（创作与输出）模式下
+    - 输入h，获得帮助
+    - 输入outline 主题，生成文章提纲并保存到 outline.json
+    - wa，写一篇完整的文章，并保存到reports目录下
 
 ## 🏗️ 架构概述
 
 ### 核心组件
 - **应用层**：基于 RubyRich 的 TUI 和组件架构
-- **代理系统**：SmartAgent 框架进行 LLM 编排
+- **智能代理系统**：SmartAgent 框架进行 LLM 编排
 - **工具生态**：MCP 集成工具扩展能力
 - **知识库**：支持向量搜索的结构化存储
 
@@ -126,20 +99,6 @@ npm run build
 4. **工具执行** → MCP 服务器和自定义工具
 5. **知识整合** → 将发现存储到研究主题
 6. **响应生成** → 返回全面答案
-
-## 🔧 可用工具
-
-### MCP 工具
-- `opendigger`: 开源项目分析
-- `all_in_one`: 综合工具集合
-- `amap`: 位置和地图服务
-
-### 自定义工具
-- `get_weather`: 天气信息检索
-- `get_code`: 动态代码生成和执行
-- `meta_scrape`: 网页内容提取
-- `create_research_topic`: 研究组织管理
-- `query_db`: 数据库查询能力
 
 ## 🤝 参与贡献
 
