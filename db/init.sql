@@ -19,7 +19,8 @@ CREATE TABLE source_documents (
     publication_date DATE, -- 文献发表时间，或知识库收录的时间
     language TEXT,
     description TEXT,
-    url TEXT
+    url TEXT,
+    download_state INTEGER DEFAULT 0
 );
 
 -- 文献章节（通过 tag_id 支持分类）

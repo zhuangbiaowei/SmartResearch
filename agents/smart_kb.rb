@@ -183,6 +183,8 @@ SmartAgent::Agent.define :smart_kb do
 
     # Process content with chunking
     process_content_chunks(doc_id, title, md_content, topic_ids)
+    doc.download_state = 1
+    doc.save
     show_log "下载并分片保存完成"
   elsif input.downcase[0..1] == "d " && (input[2..-1].include?("https://") || input[2..-1].include?("http://"))
     url = input[2..-1]
@@ -202,6 +204,8 @@ SmartAgent::Agent.define :smart_kb do
 
     # Process content with chunking
     process_content_chunks(doc[:id], title, md_content)
+    doc.download_state = 1
+    doc.save
     show_log "下载并分片保存完成"
   elsif input.downcase[0..3] == "del " && input[4..-1].to_i > 0
     doc_id = input[4..-1].to_i
@@ -222,7 +226,6 @@ SmartAgent::Agent.define :smart_kb do
 
       # 删除SourceDocument记录
       doc.delete
-
       show_log "文档及其相关记录已删除"
     else
       show_log "未找到指定的文档"
@@ -238,13 +241,14 @@ SmartAgent::Agent.define :smart_kb do
     ResearchTopicSection.order_by(:section_id).where_all(research_topic_id: topic_id).each do |rts|
       section = SourceSection[rts[:section_id]]
       doc = SourceDocument[section[:document_id]]
+      next if doc.download_state > 0
       unless doc_list.include?(doc.id)
         doc_list << doc.id
         if section.content == "null"
           begin
             show_log "下载： #{doc[:url]}"
             content = call_worker(:download_page, { url: doc[:url] })
-            unless content.content.empty?
+            unless content.content.to_s.empty?
               pattern = /\[title\]\s*(.*?)\s*\[\/title\]/m
               match = content.content.match(pattern)
               title = match ? match[1] : doc[:title] || "Untitled"
@@ -273,9 +277,17 @@ SmartAgent::Agent.define :smart_kb do
 
               # Process content with chunking
               process_content_chunks(doc.id, title, md_content, topic_ids)
+              doc.download_state = 1
+              doc.save
               show_log "下载并分片保存完成"
+            else
+              doc.download_state = 2
+              doc.save
+              show_log "下载失败"
             end
           rescue => e
+            doc.download_state = 2
+            doc.save
             show_log "下载失败: #{e.message}"
           end
         end
@@ -285,10 +297,11 @@ SmartAgent::Agent.define :smart_kb do
     SourceSection.order_by(:id).where(content: "null").select_map(:id).each do |section_id|
       section = SourceSection[section_id]
       doc = SourceDocument[section.document_id]
+      next if doc.download_state > 0
       show_log "下载： #{doc[:url]}"
       begin
         content = call_worker(:download_page, { url: doc[:url] })
-        unless content.content.empty?
+        unless content.content.to_s.empty?
           pattern = /\[title\]\s*(.*?)\s*\[\/title\]/m
           match = content.content.match(pattern)
           title = match ? match[1] : doc[:title] || "Untitled"
@@ -317,9 +330,17 @@ SmartAgent::Agent.define :smart_kb do
 
           # Process content with chunking
           process_content_chunks(doc.id, title, md_content, topic_ids)
+          doc.download_state = 1
+          doc.save
           show_log "下载并分片保存完成"
+        else
+          doc.download_state = 2
+          doc.save
+          show_log "下载失败"
         end
       rescue => e
+        doc.download_state = 2
+        doc.save
         show_log "下载失败: #{e.message}"
       end
     end

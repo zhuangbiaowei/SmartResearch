@@ -10,7 +10,7 @@ table_names.each do |table_name|
 end
 puts "✅ 数据库表已清空。"
 
-sql_file_path = "init.sql"
+sql_file_path = "db/init.sql"
 sql = File.read(sql_file_path)
 sql.split(/;\s*$/).each do |statement|
   next if statement.strip.empty?

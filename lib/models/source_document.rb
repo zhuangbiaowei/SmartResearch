@@ -13,6 +13,15 @@ class SourceDocument < Sequel::Model
   one_to_many :source_sections, key: :document_id
   one_to_many :embeddings, key: :source_id
 
+  # 下载状态操作
+  def download_state
+    self[:download_state]
+  end
+
+  def download_state=(state)
+    self[:download_state] = state
+  end
+
   # CRUD 操作封装
   class << self
     def create_document(title, author = nil, publication_date = nil, language = nil, description = nil)
